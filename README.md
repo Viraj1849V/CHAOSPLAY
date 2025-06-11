@@ -1,10 +1,11 @@
 # CHAOSPLAY
-ChaosPlay is an immersive browser-based casino platform offering classic games like Blackjack, Dice Roll, Mines, Plinko, and Slot Machine. Each game is interconnected via a dynamic main interface, maintaining a unified balance and visual theme.
+ChaosPlay is an immersive browser-based casino platform offering classic games, including Blackjack, Dice Roll, Mines, Plinko, and a Slot Machine. Each game is interconnected via a dynamic main interface, maintaining a unified balance and visual theme.
+
 👨‍💻 Team Members & Contributions
 Viraj Pathare – Project Manager
 - Oversaw the overall structure and integration of the ChaosPlay platform
 - Linked all individual game pages to the central main hub with a consistent navigation system
-- Developed and implemented the local storage mechanism to maisntain a synchronized balance across all games
+- Developed and implemented the local storage mechanism to maintain a synchronized balance across all games
 - Actively participated in collaborative coding, debugging, and decision-making throughout the development process
 - Played a key role in code integration, troubleshooting, ensuring consistency in functionality, styling, and user interaction across the platform
 - Conducted final testing, optimization, and UI polishing, adding critical finishing touches that enhanced the professionalism and performance of the site

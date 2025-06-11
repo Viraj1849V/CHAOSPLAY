@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaosPlay - Online Betting Platform</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #1a0a0a; /* Matte Red Background */
+            color: #d4af37; /* Matte Gold Text */
+            height: 100%;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(26, 10, 10, 0.9);
+            color: #d4af37;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Hero Section */
+        #hero {
+            background: linear-gradient(135deg, #4a0f0f, #5a0f0f);
+            text-align: center;
+            padding: 100px 0;
+            margin-top: 90px;
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.7);
+        }
+
+        #hero h2 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        p {
+            padding: 0px 0px 20px 0px;
+        }
+        .cta-btn {
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            padding: 15px 35px;
+            font-size: 22px;
+            text-decoration: none;
+            color: black;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            transform: scale(1.1);
+        }
+
+        /* Game List */
+        .game-list {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 8%;
+            background-color: #1a0a0a;
+            gap: 20px; /* Space between game cards */
+            flex-wrap: nowrap; /* Ensure all games stay in one row */
+        }
+
+        .game-card {
+            text-align: center;
+            width: 220px;
+            background: linear-gradient(135deg, #3b0f0f, #4a0f0f);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            border: 3px solid #d4af37; /* Matte Gold Border */
+            transition: 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.5);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .game-card h3 {
+            color: #d4af37;
+            margin-top: 10px;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            color: black;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(26, 10, 10, 0.9);
+            color: #d4af37;
+            padding: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .game-list {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+#reset-balance {
+    position: absolute;
+    top: 45px;
+    right: 35px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#reset-balance:hover {
+    background-color: #cc0000;
+}
+
+.about {
+    position: absolute;
+    top: 45px;
+    left: 35px;
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+} 
+
+.about:hover {
+    background-color: #cc0000;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>ChaosPlay</h1>
+        <button id="reset-balance">Reset Balance</button>
+        <a class="about" href="about.html">About</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <h2>Welcome to ChaosPlay</h2>
+        <p>Your ultimate destination for online betting. Bet on sports, casino games, and more!</p>
+        <a href="#games" class="cta-btn">Start Betting</a>
+    </section>
+
+    <!-- Games Section (All in One Row, With Spacing) -->
+    <section id="games" class="game-list">
+        <div class="game-card">
+            <img src="https://dl.memuplay.com/new_market/img/com.pokerjogo.plinko.icon.2023-05-23-10-52-24.png" alt="Plinko">
+            <h3>Plinko</h3>
+            <a href="plinko.html" class="play-btn">Play Now</a>
+        </div>
+
+        <div class="game-card">
+            <img src="https://image.winudf.com/v2/image1/Y2M2LmNhc2lub19zY3JlZW5fMV8xNjg0ODE0MzIyXzA2Mw/screen-1.jpg?fakeurl=1&type=.jpg" alt="Mines">
+            <h3>Mines</h3>
+            <a href="mines.html" class="play-btn">Play Now</a>
+        </div>
+
+        <div class="game-card">
+            <img src="https://cdn.wallpapersafari.com/90/34/eduM8n.jpg" alt="Dice Roll">
+            <h3>Dice Roll</h3>
+            <a href="diceroll.html" class="play-btn">Play Now</a>
+        </div>
+
+        <div class="game-card">
+            <img src="https://img.freepik.com/premium-photo/slot-machine-excitement-bar-lucky-7_1160504-3517.jpg" alt="Slot Machine">
+            <h3>Slot Machine</h3>
+            <a href="slotmachine.html" class="play-btn">Play Now</a>
+        </div>
+
+        <div class="game-card">
+            <img src="https://media.istockphoto.com/id/1320296956/vector/blackjack-logo-with-green-ribbon-and-on-a-green-background-isolated-card-game-casino-game.jpg?s=612x612&w=0&k=20&c=XeJmoCcZrYk_6VN0rFhhRkreXmtPFyhiipT-5o6-bS4=" alt="Black Jack">
+            <h3>Blackjack Royal</h3>
+            <a href="blackjack.html" class="play-btn">Play Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ChaosPlay. All rights reserved.</p>
+    </footer>
+    <script>
+document.getElementById("reset-balance").addEventListener("click", function() {
+    localStorage.setItem("casinoBalance", 1000); // Reset balance globally
+    alert("Balance reset to $1000!");
+    
+    // Update balance on the current page if it has a balance display
+    let balanceDisplay = document.getElementById("balance");
+    if (balanceDisplay) {
+        balanceDisplay.textContent = 1000;
+    }
+});
+
+
+    </script>
+</body>
+</html>

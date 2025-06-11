@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mines - ChaosPlay</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            text-align: center;
+            background: #1a0a0a; /* Matte Red */
+            color: #d4af37; /* Matte Gold */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 36px;
+            text-shadow: 2px 2px 10px rgba(212, 175, 55, 0.5);
+        }
+
+        #game-container {
+            width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #3b0f0f, #4a0f0f);
+            border: 4px solid #d4af37;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cell {
+            width: 60px;
+            height: 60px;
+            background: #4a0f0f;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 60px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .cell:hover {
+            background: #d4af37;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        .cell.revealed {
+            pointer-events: none;
+        }
+
+        .cell.safe {
+            background: #b8860b;
+            color: black;
+        }
+
+        .cell.mine {
+            background: #b22222;
+            color: white;
+        }
+
+        .controls {
+            margin: 20px;
+        }
+
+        input {
+            width: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+            background: #4a0f0f;
+            color: #d4af37;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            color: black;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s, box-shadow 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(212, 175, 55, 0.5);
+        }
+
+        #score {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mines - ChaosPlay</h1>
+    <p id="score">Balance: $<span id="balance">1000</span> | Bet: $<span id="bet">0</span> | Multiplier: <span id="multiplier">1x</span></p>
+
+    <div class="controls">
+        <input type="number" id="betAmount" placeholder="Enter Bet" min="1">
+        <button onclick="startGame()">Start Game</button>
+        <button onclick="cashout()" id="cashout-btn" style="display: none;">Cashout</button>
+    </div>
+
+    <div id="game-container">
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <script>
+        
+const grid = document.getElementById("grid");
+
+// Load balance from localStorage
+let balance = localStorage.getItem("casinoBalance");
+if (balance === null) {
+    balance = 1000; // Default balance
+    localStorage.setItem("casinoBalance", balance);
+} else {
+    balance = parseInt(balance);
+}
+
+let betAmount = 0;
+let minePositions = [];
+let gameActive = false;
+let multiplier = 1;
+let revealedTiles = 0;
+
+document.getElementById("balance").textContent = balance;
+
+function startGame() {
+    betAmount = parseInt(document.getElementById("betAmount").value);
+    if (isNaN(betAmount) || betAmount < 1) {
+        alert("Please enter a valid bet.");
+        return;
+    }
+
+    if (betAmount > balance) {
+        alert("Insufficient balance!");
+        return;
+    }
+
+    balance -= betAmount;
+    localStorage.setItem("casinoBalance", balance); // Save balance globally
+    multiplier = 1;
+    revealedTiles = 0;
+    updateScore();
+    gameActive = true;
+    document.getElementById("cashout-btn").style.display = "inline-block";
+    generateGrid();
+}
+
+function generateGrid() {
+    grid.innerHTML = "";
+    minePositions = [];
+    let totalCells = 25;
+    let totalMines = 5;
+
+    while (minePositions.length < totalMines) {
+        let randomPos = Math.floor(Math.random() * totalCells);
+        if (!minePositions.includes(randomPos)) {
+            minePositions.push(randomPos);
+        }
+    }
+
+    for (let i = 0; i < totalCells; i++) {
+        let cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+        cell.addEventListener("click", revealCell);
+        grid.appendChild(cell);
+    }
+}
+
+function revealCell() {
+    if (!gameActive) return;
+
+    let index = parseInt(this.dataset.index);
+    this.classList.add("revealed");
+
+    if (minePositions.includes(index)) {
+        this.classList.add("mine");
+        this.innerText = "💣";
+        endGame(false);
+    } else {
+        this.classList.add("safe");
+        this.innerText = "💎";
+        revealedTiles++;
+        multiplier = parseFloat((multiplier * 1.1).toFixed(2));
+        updateScore();
+    }
+}
+
+function cashout() {
+    if (!gameActive) return;
+
+    let winnings = Math.floor(betAmount * multiplier);
+    balance += winnings;
+    localStorage.setItem("casinoBalance", balance); // Save balance globally
+    document.getElementById("balance").textContent = balance;
+    alert(`You cashed out $${winnings}!`);
+    endGame(true);
+}
+
+function endGame(win) {
+    gameActive = false;
+    document.getElementById("cashout-btn").style.display = "none";
+
+    if (!win) {
+        alert("You hit a mine! Game Over.");
+    }
+
+    updateScore();
+}
+
+function updateScore() {
+    document.getElementById("balance").innerText = balance;
+    document.getElementById("bet").innerText = betAmount;
+    document.getElementById("multiplier").innerText = `${multiplier}x`;
+}
+
+    </script>
+
+</body>
+</html>

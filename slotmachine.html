@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaosPlay Casino Slot Machine</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a0a0a; /* Matte Red Background */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .casino-container {
+            text-align: center;
+            padding: 30px 50px;
+            background: linear-gradient(135deg, #4a0f0f, #5a0f0f); /* Hero Section Gradient */
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            transition: transform 0.5s ease;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 50px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #d4af37, 0 0 30px #d4af37, 0 0 45px #d4af37; /* Matte Gold Shadow */
+            color: #d4af37; /* Matte Gold Text */
+        }
+
+        .slot-machine {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .slot {
+            font-size: 60px;
+            margin: 0 15px;
+            padding: 30px;
+            background: linear-gradient(135deg, #3b0f0f, #4a0f0f); /* Game Card Gradient */
+            border-radius: 15px;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.8); /* Golden Glow */
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slot:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 1); /* Golden Glow on Hover */
+        }
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #b8860b, #d4af37); /* Gold Button Gradient */
+            border: none;
+            color: black; /* Black Text Inside Button */
+            font-size: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #d4af37, #b8860b); /* Reverse Gold Button Gradient */
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 25px;
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 15px #d4af37, 0 0 30px #d4af37;
+            color: #d4af37; /* Matte Gold Text */
+        }
+
+        /* Animation for slot spinning */
+        @keyframes spinSlot {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .spinning {
+            animation: spinSlot 1s ease-in-out;
+        }
+
+        /* Animation for Result */
+        @keyframes glowText {
+            0% { text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37, 0 0 30px #d4af37; }
+            50% { text-shadow: 0 0 20px #ff6b6b, 0 0 30px #ff6b6b, 0 0 40px #d4af37; }
+            100% { text-shadow: 0 0 10px #d4af37, 0 0 20px #d4af37, 0 0 30px #d4af37; }
+        }
+
+        .glow {
+            animation: glowText 1.5s infinite alternate;
+        }
+
+        /* Bet Zone Betting System Styles */
+        .bet-controls {
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            width: 100px;
+            margin-bottom: 10px;
+            border: 2px solid #d4af37; /* Gold Border */
+            background: #1a0a0a; /* Dark Red Background for Input */
+            color: #d4af37; /* Gold Text Color */
+        }
+
+        .balance {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #d4af37; /* Matte Gold Text */
+        }
+
+        .bet-btn {
+            padding: 15px 30px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            color: black; /* Black Text Inside Button */
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .bet-btn:hover {
+            background: #b8860b; /* Gold Accent on Hover */
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="casino-container">
+        <h1>Welcome to ChaosPlay Casino!</h1>
+
+        <!-- Player's Balance -->
+        <div class="balance">Balance: $<span id="balance">1000</span></div>
+
+        <div class="slot-machine">
+            <div class="slot" id="slot1">🍒</div>
+            <div class="slot" id="slot2">🍋</div>
+            <div class="slot" id="slot3">🍉</div>
+        </div>
+
+        <div class="bet-controls">
+            <!-- Input Bet Amount -->
+            <input type="number" id="betAmount" placeholder="Bet Amount" min="1">
+            <button id="spin-button" class="bet-btn">Spin</button>
+        </div>
+
+        <!-- Result Message -->
+        <div id="result" class="glow"></div>
+    </div>
+
+<script>
+// Load balance from localStorage
+let balance = localStorage.getItem("casinoBalance");
+if (balance === null) {
+    balance = 1000; // Default balance
+    localStorage.setItem("casinoBalance", balance);
+} else {
+    balance = parseInt(balance);
+}
+document.getElementById("balance").textContent = balance;
+
+document.getElementById("spin-button").addEventListener("click", function () {
+    let betAmount = parseInt(document.getElementById("betAmount").value);
+    if (isNaN(betAmount) || betAmount <= 0) {
+        document.getElementById("result").textContent = "Please enter a valid bet!";
+        return;
+    }
+
+    if (betAmount > balance) {
+        document.getElementById("result").textContent = "Insufficient balance!";
+        return;
+    }
+
+    // Deduct bet
+    balance -= betAmount;
+    localStorage.setItem("casinoBalance", balance); // Save balance
+    document.getElementById("balance").textContent = balance;
+
+    let symbols = ["🍒", "🍋", "🍉", "🍊", "🍇"];
+    let slot1El = document.getElementById("slot1");
+    let slot2El = document.getElementById("slot2");
+    let slot3El = document.getElementById("slot3");
+
+    let rollDuration = 1000; // total rolling time in ms
+    let intervalTime = 100; // time between symbol changes
+    let totalSteps = rollDuration / intervalTime;
+    let currentStep = 0;
+
+    let interval = setInterval(() => {
+        slot1El.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        slot2El.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        slot3El.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        currentStep++;
+
+        if (currentStep >= totalSteps) {
+            clearInterval(interval);
+
+            // Final spin result
+            let final1 = symbols[Math.floor(Math.random() * symbols.length)];
+            let final2 = symbols[Math.floor(Math.random() * symbols.length)];
+            let final3 = symbols[Math.floor(Math.random() * symbols.length)];
+
+            slot1El.textContent = final1;
+            slot2El.textContent = final2;
+            slot3El.textContent = final3;
+
+            if (final1 === final2 && final2 === final3) {
+                let winnings = betAmount * 5;
+                balance += winnings;
+                localStorage.setItem("casinoBalance", balance); // Save balance
+                document.getElementById("balance").textContent = balance;
+                document.getElementById("result").textContent = `You Win! +$${winnings}`;
+            } else {
+                document.getElementById("result").textContent = `Try Again!`;
+            }
+        }
+    }, intervalTime);
+});
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaosPlay - Dice Roller</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #1a0a0a;
+            color: #d4af37;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .balance {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .dice {
+            width: 100px;
+            height: 100px;
+            margin: 20px;
+            background: linear-gradient(135deg, #3b0f0f, #4a0f0f);
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            perspective: 1000px;
+            border: 3px solid #d4af37;
+        }
+
+        .dice-inner {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 1s ease-in-out;
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            color: black;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 215, 0, 0.8);
+        }
+
+        .face1 { transform: rotateY(0deg) translateZ(50px); }
+        .face2 { transform: rotateY(90deg) translateZ(50px); }
+        .face3 { transform: rotateY(180deg) translateZ(50px); }
+        .face4 { transform: rotateY(270deg) translateZ(50px); }
+        .face5 { transform: rotateX(90deg) translateZ(50px); }
+        .face6 { transform: rotateX(-90deg) translateZ(50px); }
+
+        .roll-btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 20px;
+            background: linear-gradient(135deg, #b8860b, #d4af37);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: black;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: 0.3s ease;
+        }
+
+        .roll-btn:hover {
+            background: linear-gradient(135deg, #d4af37, #b8860b);
+            transform: scale(1.1);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            width: 100px;
+            margin-bottom: 10px;
+            background-color: #3b0f0f;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to the Dice Roller Game!</h1>
+
+    <div class="balance">Balance: $<span id="balance">1000</span></div>
+
+    <input type="number" id="betAmount" placeholder="Bet Amount" min="1">
+
+    <div class="dice-container">
+        <div class="dice" id="dice1">
+            <div class="dice-inner">
+                <div class="face face1">1</div>
+                <div class="face face2">2</div>
+                <div class="face face3">3</div>
+                <div class="face face4">4</div>
+                <div class="face face5">5</div>
+                <div class="face face6">6</div>
+            </div>
+        </div>
+        <div class="dice" id="dice2">
+            <div class="dice-inner">
+                <div class="face face1">1</div>
+                <div class="face face2">2</div>
+                <div class="face face3">3</div>
+                <div class="face face4">4</div>
+                <div class="face face5">5</div>
+                <div class="face face6">6</div>
+            </div>
+        </div>
+    </div>
+
+    <button class="roll-btn" onclick="rollDice()">Roll Dice</button>
+
+    <div class="result" id="result">Place your bet and roll the dice!</div>
+    
+    <script>
+        // Load balance from localStorage
+let balance = localStorage.getItem("casinoBalance");
+if (balance === null) {
+    balance = 1000; // Default balance
+    localStorage.setItem("casinoBalance", balance);
+} else {
+    balance = parseInt(balance);
+}
+
+// Update balance display
+document.getElementById("balance").textContent = balance;
+
+function rollDice() {
+    const betInput = document.getElementById('betAmount');
+    let betAmount = parseInt(betInput.value);
+    const balanceDisplay = document.getElementById('balance');
+    const result = document.getElementById('result');
+
+    if (isNaN(betAmount) || betAmount <= 0) {
+        result.innerText = "Enter a valid bet amount!";
+        return;
+    }
+
+    if (betAmount > balance) {
+        result.innerText = "Insufficient balance!";
+        return;
+    }
+
+    // Deduct bet amount first
+    balance -= betAmount;
+    localStorage.setItem("casinoBalance", balance); // Save balance globally
+    balanceDisplay.innerText = balance;
+
+    const dice1 = document.getElementById('dice1').querySelector('.dice-inner');
+    const dice2 = document.getElementById('dice2').querySelector('.dice-inner');
+
+    let rolledDice1 = Math.floor(Math.random() * 6) + 1;
+    let rolledDice2 = Math.floor(Math.random() * 6) + 1;
+
+    // Reset dice animation
+    dice1.style.transition = 'none';
+    dice2.style.transition = 'none';
+    dice1.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    dice2.style.transform = 'rotateX(0deg) rotateY(0deg)';
+
+    setTimeout(() => {
+        dice1.style.transition = 'transform 1s ease-in-out';
+        dice2.style.transition = 'transform 1s ease-in-out';
+
+        // Animate dice roll
+        dice1.style.transform = `rotateX(720deg) rotateY(720deg)`;
+        dice2.style.transform = `rotateX(720deg) rotateY(720deg)`;
+
+        setTimeout(() => {
+            document.querySelector('#dice1 .face1').innerText = rolledDice1;
+            document.querySelector('#dice2 .face1').innerText = rolledDice2;
+
+            if (rolledDice1 === rolledDice2) {
+                let winnings = betAmount * 2;
+                balance += winnings;
+                localStorage.setItem("casinoBalance", balance); // Save balance globally
+                balanceDisplay.innerText = balance;
+                result.innerText = `You Win! 🎉 +$${winnings}`;
+            } else {
+                result.innerText = `You Lost! ❌`;
+            }
+        }, 1000); // Wait for animation to complete
+    }, 50); // Quick reset before rolling
+}
+
+    </script>
+
+</body>
+</html>
